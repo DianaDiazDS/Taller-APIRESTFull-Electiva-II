@@ -16,11 +16,15 @@ const SchemaPatient = new Schema({
     type: Date,
     required: true,
   },
+  hora: {
+    type: String,
+    required: true,
+  },
   medic: {
     type: String,
     required: true,
   },
-  patient: {
+  patients: {
     type: Schema.Types.ObjectId,
     ref: "patient",
   },
