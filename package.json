@@ -2,10 +2,10 @@
   "name": "taller-apirestfull-electiva-ii",
   "version": "1.0.0",
   "description": "Desarrollo del taller 2 sobre APIRESTFull",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon index.js"
   },
   "keywords": [
     "APIRESTFull"
