@@ -1,6 +1,12 @@
 const router = require("express").Router();
 
-const {findAll, findById, save, update, drop} = require("../controllers/appointment")
+const {
+  findAll,
+  findById,
+  save,
+  update,
+  drop,
+} = require("../controllers/appointment");
 
 router.get("/", findAll);
 router.get("/:id", findById);

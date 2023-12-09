@@ -57,7 +57,7 @@ module.exports = {
           }
         } else {
           return res
-            .status(500)
+            .status(400)
             .json({ state: false, error: "Ya hay una cita con ese número" });
         }
       } catch (error) {
@@ -65,7 +65,7 @@ module.exports = {
       }
     } else {
       return res
-        .status(200)
+        .status(400)
         .json({ state: false, error: "El paciente no existe" });
     }
   },
