@@ -1,13 +1,17 @@
 const Patient = require("../models/patient-model");
 
 
-const validatePatientData = (data) => {
+const validatePatientData = (data, accion) => {
   const { cedula, firstname, lastname, gender, age, phonenumber, address, mail, appointments } = data;
 
-  // Validación de cedula: solo números
-  if (!/^\d+$/.test(cedula)) {
-    return "La cédula debe contener solo números.";
+
+  if(accion=="save"){
+    if (!/^\d+$/.test(cedula)) {
+      return "La cédula debe contener solo números.";
+    }
   }
+  // Validación de cedula: solo números
+  
 
   // Validación de firstName y lastName: solo letras sin caracteres especiales
   if (!/^[a-zA-Z\s]+$/.test(firstname) || !/^[a-zA-Z\s]+$/.test(lastname)) {
@@ -68,7 +72,7 @@ module.exports = {
     const { cedula } = req.body;
 
     const patientData = req.body;
-    const validationError = validatePatientData(patientData);
+    const validationError = validatePatientData(patientData,"save");
     if (validationError) {
       return res.status(400).json({ state: false, error: validationError });
     }
@@ -99,9 +103,12 @@ module.exports = {
     const patientData = req.body;
 
     // Validar los datos del paciente
-    const validationError = validatePatientData(patientData);
+    const validationError = validatePatientData(patientData,"update");
     if (validationError) {
       return res.status(400).json({ state: false, error: validationError });
+    }
+    if (cedula) {
+      return res.status(400).json({ state: false, error: "No se permite modificar la cédula." });
     }
 
     try {
