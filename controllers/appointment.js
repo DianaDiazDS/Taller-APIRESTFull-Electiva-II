@@ -29,40 +29,45 @@ module.exports = {
     const patient = await Patient.findById(id);
     if (patient) {
       try {
-        let found = await Appointment.findOne({ number: req.body.number });
-        if (!found) {
-          const dateRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-          const isDateValid = !isNaN(Date.parse(req.body.date));
+        const dateRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+        const isDateValid = !isNaN(Date.parse(req.body.date));
 
-          if (
-            isDateValid &&
-            dateRegex.test(req.body.hour) &&
-            Date.parse(req.body.date) >= Date.now() &&
-            req.body.name != "" &&
-            req.body.adrress != "" &&
-            req.body.num != 0 &&
-            req.body.specialist != ""
-          ) {
-            const appointment = new Appointment(req.body);
-            appointment.patient = patient;
-
-            const result = await appointment.save();
-
-            patient.appointments.push(appointment);
-
-            await patient.save();
-
-            return res.status(200).json({ state: true, data: result });
-          } else {
-            return res.status(500).json({
-              state: false,
-              error: "Error al ingresar los datos",
-            });
-          }
-        } else {
+        if (req.body.number) {
           return res
             .status(400)
-            .json({ state: false, error: "Ya hay una cita con ese número" });
+            .json({
+              state: false,
+              error: "El numero de la cita es autogenerado",
+            });
+        }
+
+        if (
+          isDateValid &&
+          dateRegex.test(req.body.hour) &&
+          Date.parse(req.body.date) >= Date.now() &&
+          req.body.name != "" &&
+          req.body.adrress != "" &&
+          req.body.specialist != ""
+        ) {
+          const appointmentCount = await Appointment.estimatedDocumentCount();
+          const appointmentNumber = appointmentCount + 1;
+
+          const appointment = new Appointment(req.body);
+          appointment.patient = patient;
+          appointment.number = appointmentNumber;
+
+          const result = await appointment.save();
+
+          patient.appointments.push(appointment);
+
+          await patient.save();
+
+          return res.status(200).json({ state: true, data: result });
+        } else {
+          return res.status(500).json({
+            state: false,
+            error: "Error al ingresar los datos",
+          });
         }
       } catch (error) {
         return res.status(500).json({ state: false, error: error.message });
