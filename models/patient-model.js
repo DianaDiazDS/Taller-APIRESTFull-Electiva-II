@@ -8,16 +8,32 @@ const SchemaPatient = new Schema({
     required: true,
     unique: true,
   },
-  name: {
+  firstname: {
     type: String,
     required: true,
   },
-  genero: {
+  lastname: {
+    type: String,
+    required: true,
+  },
+  gender: {
     type: String,
     required: true,
   },
   age: {
     type: Number,
+    required: true,
+  },
+  phonenumber: {
+    type: Number,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  mail: {
+    type: String,
     required: true,
   },
   appointments: [

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const SchemaPatient = new Schema({
-  numero: {
+  number: {
     type: Number,
     required: true,
     unique: true,
@@ -12,19 +12,23 @@ const SchemaPatient = new Schema({
     type: String,
     required: true,
   },
-  fecha: {
+  date: {
     type: Date,
     required: true,
   },
-  hora: {
+  hour: {
     type: String,
     required: true,
   },
-  medic: {
+  address: {
     type: String,
     required: true,
   },
-  patients: {
+  specialist: {
+    type: String,
+    required: true,
+  },
+  patient: {
     type: Schema.Types.ObjectId,
     ref: "patient",
   },
