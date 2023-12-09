@@ -1,17 +1,23 @@
 const Patient = require("../models/patient-model");
 
-
 const validatePatientData = (data, accion) => {
-  const { cedula, firstname, lastname, gender, age, phonenumber, address, mail, appointments } = data;
+  const {
+    cedula,
+    firstname,
+    lastname,
+    gender,
+    age,
+    phonenumber,
+    address,
+    mail,
+    appointments,
+  } = data;
 
-
-  if(accion=="save"){
+  if (accion == "save") {
     if (!/^\d+$/.test(cedula)) {
       return "La cédula debe contener solo números.";
     }
   }
-  // Validación de cedula: solo números
-  
 
   // Validación de firstName y lastName: solo letras sin caracteres especiales
   if (!/^[a-zA-Z\s]+$/.test(firstname) || !/^[a-zA-Z\s]+$/.test(lastname)) {
@@ -39,12 +45,9 @@ const validatePatientData = (data, accion) => {
     return "La dirección debe contener solo letras, números, # y -.";
   }
 
-  // Validación de appointments: podrías agregar validaciones adicionales según la estructura de tus datos
-
   return null; // Retorna nulo si no hay errores de validación
 };
 module.exports = {
-
   findAll: async (req, res) => {
     try {
       const data = await Patient.find({});
@@ -68,22 +71,22 @@ module.exports = {
     }
   },
   save: async (req, res) => {
-
     const { cedula } = req.body;
 
     const patientData = req.body;
-    const validationError = validatePatientData(patientData,"save");
+    const validationError = validatePatientData(patientData, "save");
     if (validationError) {
       return res.status(400).json({ state: false, error: validationError });
     }
 
     try {
-
-
       const existingPatient = await Patient.findOne({ cedula });
 
       if (existingPatient) {
-        return res.status(400).json({ state: false, error: "Ya existe un paciente con esta cédula" });
+        return res.status(400).json({
+          state: false,
+          error: "Ya existe un paciente con esta cédula",
+        });
       }
 
       const patient = new Patient(req.body);
@@ -95,20 +98,30 @@ module.exports = {
     }
   },
 
-
-
   update: async (req, res) => {
     const { idPatient } = req.params;
-    const { cedula, firstname, lastname, gender, age, phonenumber, address, mail, appointments } = req.body;
+    const {
+      cedula,
+      firstname,
+      lastname,
+      gender,
+      age,
+      phonenumber,
+      address,
+      mail,
+      appointments,
+    } = req.body;
     const patientData = req.body;
 
     // Validar los datos del paciente
-    const validationError = validatePatientData(patientData,"update");
+    const validationError = validatePatientData(patientData, "update");
     if (validationError) {
       return res.status(400).json({ state: false, error: validationError });
     }
     if (cedula) {
-      return res.status(400).json({ state: false, error: "No se permite modificar la cédula." });
+      return res
+        .status(400)
+        .json({ state: false, error: "No se permite modificar la cédula." });
     }
 
     try {
@@ -152,5 +165,3 @@ module.exports = {
     }
   },
 };
-
-

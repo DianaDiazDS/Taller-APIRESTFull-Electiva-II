@@ -75,7 +75,7 @@ module.exports = {
   },
   update: async (req, res) => {
     const { idAppointment } = req.params;
-    const { number, name, hour, date, specialist, patient } = req.body;
+    const { number, name, hour, date, specialist } = req.body;
 
     try {
       const isValidDate = !isNaN(Date.parse(date));
@@ -96,6 +96,13 @@ module.exports = {
         });
       }
 
+      if (name == "" || hour == "" || date == "" || specialist == "") {
+        return res.status(400).json({
+          state: false,
+          message: "No se pueden ingresar campos vacios",
+        });
+      }
+
       const updatedAppointment = await Appointment.findByIdAndUpdate(
         idAppointment,
         {
@@ -104,7 +111,6 @@ module.exports = {
           hour: hour,
           date: date,
           specialist: specialist,
-          patient: patient,
         },
         { new: true }
       );
