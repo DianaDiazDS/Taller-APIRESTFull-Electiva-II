@@ -37,7 +37,11 @@ module.exports = {
           if (
             isDateValid &&
             dateRegex.test(req.body.hour) &&
-            Date.parse(req.body.date) >= Date.now()
+            Date.parse(req.body.date) >= Date.now() &&
+            req.body.name != "" &&
+            req.body.adrress != "" &&
+            req.body.num != 0 &&
+            req.body.specialist != ""
           ) {
             const appointment = new Appointment(req.body);
             appointment.patient = patient;
@@ -52,7 +56,7 @@ module.exports = {
           } else {
             return res.status(500).json({
               state: false,
-              error: "La fecha o la hora no son válidas",
+              error: "Error al ingresar los datos",
             });
           }
         } else {
@@ -83,6 +87,13 @@ module.exports = {
         return res
           .status(400)
           .json({ state: false, error: "Formato de fecha o hora incorrecto" });
+      }
+
+      if (number) {
+        return res.status(400).json({
+          state: false,
+          message: "No puede cambiar el numero de la cita",
+        });
       }
 
       const updatedAppointment = await Appointment.findByIdAndUpdate(
